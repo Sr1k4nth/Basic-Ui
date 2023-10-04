@@ -11,21 +11,21 @@ const testMenuItems = [
     id: "1",
     href: "/",
     title: "School",
-    icon: <BiSolidSchool />,
+    icon: <BiSolidSchool size={30} />,
     background: "linear-gradient(to right, #f4c4f3, #fc67fa)",
   },
   {
     id: "2",
     href: "Pages/Personal",
     title: "Personal",
-    icon: <BiSolidUserCircle />,
+    icon: <BiSolidUserCircle size={30} />,
     background: "linear-gradient(to right, #11998e, #38ef7d)",
   },
   {
     id: "3",
     href: "Pages/Design",
     title: "Design",
-    icon: <SiCodesignal />,
+    icon: <SiCodesignal size={30} />,
     background: "linear-gradient(to right, #da22ff, #9733ee)",
   },
 ];
@@ -65,15 +65,11 @@ export default function Layout() {
               collapsed ? "sidebarmenu bg-dark" : "sidebarmenu1 bg-dark"
             }
           >
-            <Nav vertical className="mt-5 w-100">
-              <h4
-                className={
-                  !collapsed ? "d-none" : "text-light mb-4 mx-3 fontsize-18"
-                }
-              >
-                {" "}
-                Collections
-              </h4>
+            <div className="text-light side-bar-title mx-3 fontsize-18">
+              {" "}
+              {!collapsed ? "" : "Collections"}
+            </div>
+            <Nav vertical className="w-100">
               {menuItem.map((item, idx) => (
                 <NavItem
                   className={
@@ -92,27 +88,24 @@ export default function Layout() {
                     to={item.href}
                     className="text-decoration-none mt-3"
                   >
-                    <h5>
+                    <div className="d-flex">
                       <span
                         style={{
-                          fontSize: "25px",
-                          borderRadius: "10px",
                           background: item.background,
                         }}
-                        className="text-light p-2 opened"
+                        className="text-light sidebar-icon"
                         title={collapsed ? "" : item.title}
                       >
                         {item.icon}
                       </span>
-                      &nbsp;&nbsp;&nbsp;
-                      <span
-                        className={
-                          !collapsed ? "d-none" : "text-light fontsize-15"
-                        }
-                      >
-                        {item.title}
-                      </span>
-                    </h5>
+                      {collapsed ? (
+                        <span className="text-light p-3 mx-4 fontsize-15">
+                          {item.title}
+                        </span>
+                      ) : (
+                        ""
+                      )}
+                    </div>
                   </NavLink>
                 </NavItem>
               ))}

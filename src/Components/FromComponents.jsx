@@ -94,14 +94,14 @@ function FromComponents(props) {
   const timeFromat = (time, updateTime) => {
     let timeSplit = time.split(",");
     const date = timeSplit[0];
-    const nowDate = moment().format("dddd");
+    const nowDate = moment().format("ddd");
     let isDateShow = date;
     return (
       <div
         className={
           date === nowDate
             ? updateTime !== ""
-              ? "text-decoration-line-through d-flex"
+              ? "text-decoration-line-through d-flex text-secondary"
               : "d-flex"
             : "d-flex"
         }
@@ -846,10 +846,10 @@ function FromComponents(props) {
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <div className="text-height">
                                       {" "}
-                                      <span className="fontsize-18">
+                                      <p className="font-style text-decoration-line-through">
                                         {" "}
                                         {taskItem.title}
-                                      </span>
+                                      </p>
                                     </div>
                                   </div>
                                 </Col>
@@ -862,14 +862,14 @@ function FromComponents(props) {
                                   <div className="d-flex time-space">
                                     <div>{`${taskItem.completedCount}/${taskItem.totalCount}`}</div>{" "}
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <div className="text-success">
+                                    <div className="text-pink">
                                       {timeFromat(
                                         taskItem.createdAt,
                                         taskItem.updatedAt
                                       )}
                                     </div>
                                     {taskItem.updatedAt ? (
-                                      <div className="mx-2 text-info">
+                                      <div className="mx-2 text-pink">
                                         {timeFromat(taskItem.updatedAt, "")}
                                       </div>
                                     ) : (
@@ -934,10 +934,10 @@ function FromComponents(props) {
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <div className="text-height">
                                   {" "}
-                                  <span className="fontsize-18 text-decoration-line-through">
+                                  <p className="font-style text-decoration-line-through">
                                     {" "}
                                     {item.title}
-                                  </span>
+                                  </p>
                                 </div>
                               </Label>
                             </Row>
@@ -947,16 +947,9 @@ function FromComponents(props) {
                                 className="fontsize-13 d-flex justify-content-between"
                               >
                                 <div className="d-flex time-space">
-                                  <div>
+                                  <div className="text-pink">
                                     {timeFromat(item.createdAt, item.updatedAt)}
                                   </div>
-                                  {item.updatedAt ? (
-                                    <div className="mx-2">
-                                      {timeFromat(item.updatedAt, "")}
-                                    </div>
-                                  ) : (
-                                    ""
-                                  )}
                                 </div>
                               </Col>
                             </Row>
@@ -1009,10 +1002,10 @@ function FromComponents(props) {
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <div className="text-height">
                                       {" "}
-                                      <span className="fontsize-18">
+                                      <p className="font-style text-decoration-line-through">
                                         {" "}
                                         {taskItem.title}
-                                      </span>
+                                      </p>
                                     </div>
                                   </div>
                                 </Col>
@@ -1025,14 +1018,14 @@ function FromComponents(props) {
                                   <div className="d-flex time-space">
                                     <div>{`${taskItem.completedCount}/${taskItem.totalCount}`}</div>{" "}
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <div className="text-success">
+                                    <div className="text-pink">
                                       {timeFromat(
                                         taskItem.createdAt,
                                         taskItem.updatedAt
                                       )}
                                     </div>
                                     {taskItem.updatedAt ? (
-                                      <div className="mx-2 text-info">
+                                      <div className="mx-2 text-pink">
                                         {timeFromat(taskItem.updatedAt, "")}
                                       </div>
                                     ) : (
@@ -1097,10 +1090,10 @@ function FromComponents(props) {
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <div className="text-height">
                                   {" "}
-                                  <span className="fontsize-18 text-decoration-line-through">
+                                  <p className="font-style text-decoration-line-through">
                                     {" "}
                                     {item.title}
-                                  </span>
+                                  </p>
                                 </div>
                               </Label>
                             </Row>
@@ -1110,16 +1103,9 @@ function FromComponents(props) {
                                 className="fontsize-13 d-flex justify-content-between"
                               >
                                 <div className="d-flex time-space">
-                                  <div>
+                                  <div className="text-pink">
                                     {timeFromat(item.createdAt, item.updatedAt)}
                                   </div>
-                                  {item.updatedAt ? (
-                                    <div className="mx-2">
-                                      {timeFromat(item.updatedAt, "")}
-                                    </div>
-                                  ) : (
-                                    ""
-                                  )}
                                 </div>
                               </Col>
                             </Row>
@@ -1172,10 +1158,10 @@ function FromComponents(props) {
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <div className="text-height">
                                       {" "}
-                                      <span className="fontsize-18">
+                                      <p className="font-style text-decoration-line-through">
                                         {" "}
                                         {taskItem.title}
-                                      </span>
+                                      </p>
                                     </div>
                                   </div>
                                 </Col>
@@ -1188,14 +1174,14 @@ function FromComponents(props) {
                                   <div className="d-flex time-space">
                                     <div>{`${taskItem.completedCount}/${taskItem.totalCount}`}</div>{" "}
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <div className="text-success">
+                                    <div className="text-pink">
                                       {timeFromat(
                                         taskItem.createdAt,
                                         taskItem.updatedAt
                                       )}
                                     </div>
                                     {taskItem.updatedAt ? (
-                                      <div className="mx-2 text-info">
+                                      <div className="mx-2 text-pink">
                                         {timeFromat(taskItem.updatedAt, "")}
                                       </div>
                                     ) : (
@@ -1260,10 +1246,10 @@ function FromComponents(props) {
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <div className="text-height">
                                   {" "}
-                                  <span className="fontsize-18 text-decoration-line-through">
+                                  <p className="font-style text-decoration-line-through">
                                     {" "}
                                     {item.title}
-                                  </span>
+                                  </p>
                                 </div>
                               </Label>
                             </Row>
@@ -1273,16 +1259,9 @@ function FromComponents(props) {
                                 className="fontsize-13 d-flex justify-content-between"
                               >
                                 <div className="d-flex time-space">
-                                  <div>
+                                  <div className="text-pink">
                                     {timeFromat(item.createdAt, item.updatedAt)}
                                   </div>
-                                  {item.updatedAt ? (
-                                    <div className="mx-2">
-                                      {timeFromat(item.updatedAt, "")}
-                                    </div>
-                                  ) : (
-                                    ""
-                                  )}
                                 </div>
                               </Col>
                             </Row>
