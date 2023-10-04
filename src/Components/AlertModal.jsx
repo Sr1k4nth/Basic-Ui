@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Input,
+} from "reactstrap";
 import { reactLocalStorage } from "reactjs-localstorage";
 
 function AlertModal(props) {
@@ -109,23 +116,40 @@ function AlertModal(props) {
 
   return (
     <div>
-      <Modal isOpen={props.showModal} centered className="my-modal">
+      <Modal
+        isOpen={props.showModal}
+        centered
+        className="my-modal"
+        autoFocus={false}
+      >
         <ModalHeader toggle={() => props.toggle()}>
-          {props.modalType === "update" ? (
+          {!props.isUpdate ? (
             <>
-              {props.module === "School"
-                ? "Update Task"
-                : props.module === "Personal"
-                ? "Update Details"
-                : "Update Design"}
+              {props.modalType === "update" ? (
+                <>
+                  {props.module === "School"
+                    ? "Are you Complete the Task ? "
+                    : props.module === "Personal"
+                    ? "Are you Complete the Details ? "
+                    : "Are you Complete the Design ? "}
+                </>
+              ) : (
+                <>
+                  {props.module === "School"
+                    ? "Do you want to delete Task ? "
+                    : props.module === "Personal"
+                    ? "Do you want to delete Details ?"
+                    : "Do you want to delete Design?"}
+                </>
+              )}
             </>
           ) : (
             <>
               {props.module === "School"
-                ? "Delete Task"
+                ? "Edit Task"
                 : props.module === "Personal"
-                ? "Delete Details"
-                : "Delete Design"}
+                ? "Edit Details"
+                : "Edit Design"}
             </>
           )}
         </ModalHeader>
@@ -144,44 +168,57 @@ function AlertModal(props) {
             </div>
           ) : (
             <div className="mt-3 mb-3">
-              {props.module === "School"
-                ? "You want to delete this Task"
-                : props.module === "Personal"
-                ? "You want to delete User Details"
-                : "You want to delete Design Details"}
+              {props.module === "School" ? (
+                <>
+                  <div>You want to delete this Task ?</div>
+                  <br />
+                  <div>{state.taskData}</div>
+                </>
+              ) : props.module === "Personal" ? (
+                <>
+                  <div>You want to delete User Details ?</div>
+                  <br />
+                  <div>{state.personalData}</div>
+                </>
+              ) : (
+                <>
+                  <div>You want to delete Design Details ?</div>
+                  <br />
+                  <div>{state.designData}</div>
+                </>
+              )}
             </div>
           )}
           {props.isUpdate && (
-            <div
-              className="form__group field mt-3 mb-4"
-              style={{ width: "100%" }}
-            >
-              <input
-                type="text"
-                className="form__field"
-                autoFocus='autoFocus'
-                value={
-                  props.module === "School"
-                    ? state.taskData
-                    : props.module === "Personal"
-                    ? state.personalData
-                    : state.designData
-                }
-                onChange={(e) => {
-                  updatefield(props.module, e.target.value);
-                }}
-              />
-              <div>
-                {state.tashValidate ||
-                state.personalValidate ||
-                state.designValidate ? (
-                  <div className="text-center mt-3">
-                    <span className="text-danger">
-                      {" "}
-                      Need Minimum 4 Charcters
-                    </span>
-                  </div>
-                ) : null}
+            <div class="edit_input-main">
+              <div className="edit_input-container">
+                <Input
+                  type="textarea"
+                  className="edit_input_field"
+                  autoFocus={true}
+                  value={
+                    props.module === "School"
+                      ? state.taskData
+                      : props.module === "Personal"
+                      ? state.personalData
+                      : state.designData
+                  }
+                  onChange={(e) => {
+                    updatefield(props.module, e.target.value);
+                  }}
+                />
+                <div>
+                  {state.tashValidate ||
+                  state.personalValidate ||
+                  state.designValidate ? (
+                    <div className="text-center mt-3">
+                      <span className="text-danger">
+                        {" "}
+                        Need Minimum 4 Charcters
+                      </span>
+                    </div>
+                  ) : null}
+                </div>
               </div>
             </div>
           )}
@@ -190,26 +227,39 @@ function AlertModal(props) {
           {props.modalType === "update" ? (
             <>
               {props.isUpdate ? (
-                <Button color="primary" onClick={() => updateDetails()}>
+                <Button
+                  color=""
+                  className="btn-defult-color"
+                  onClick={() => updateDetails()}
+                >
                   Update
                 </Button>
               ) : (
                 <Button
-                  color="primary"
+                  color=""
+                  className="btn-defult-color"
                   onClick={() => props.updateAjexDetails()}
                 >
-                  Update
+                  Complete
                 </Button>
               )}
             </>
           ) : (
             <>
-              <Button color="danger" onClick={() => props.deleteAjexDetails()}>
+              <Button
+                color=""
+                className="btn-defult-color"
+                onClick={() => props.deleteAjexDetails()}
+              >
                 Delete
               </Button>
             </>
           )}
-          <Button color="secondary" onClick={() => props.toggle()}>
+          <Button
+            color=""
+            className="btn-defult-color"
+            onClick={() => props.toggle()}
+          >
             Cancel
           </Button>
         </ModalFooter>

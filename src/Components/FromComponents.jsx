@@ -31,6 +31,9 @@ function FromComponents(props) {
       taskTitlExists: false,
       personalTitlExists: false,
       designTitlExists: false,
+      totalTaskcount: 0,
+      totalPersonalcount: 0,
+      totalDesigncount: 0,
     };
     return initialState;
   };
@@ -98,9 +101,9 @@ function FromComponents(props) {
         className={
           date === nowDate
             ? updateTime !== ""
-              ? "text-decoration-line-through text-warning d-flex"
-              : " text-warning d-flex"
-            : "text-success d-flex"
+              ? "text-decoration-line-through d-flex"
+              : "d-flex"
+            : "d-flex"
         }
       >
         <BsCalendar size={15} />
@@ -122,15 +125,19 @@ function FromComponents(props) {
             id: uuid(),
             title: state.taskData,
             status: "pending",
-            createdAt: moment().format("dddd, h:mm a"),
+            createdAt: moment().format("ddd, h:mm a"),
             updatedAt: "",
             moduleName: props.module,
+            createdDate: moment().format(),
+            completedCount: 0,
+            totalCount: 0,
           });
           reactLocalStorage.setObject("userDataDetails", taskDatas);
           setState((prev) => ({
             ...prev,
             isModule: "School",
             taskData: "",
+            schoolId: "",
             taskValidate: false,
             taskTitlExists: false,
           }));
@@ -146,7 +153,7 @@ function FromComponents(props) {
         taskDatas.forEach((item, index) => {
           if (item.id === state.schoolId) {
             taskDatas[index].title = state.taskData;
-            taskDatas[index].updatedAt = moment().format("dddd h:mm a");
+            taskDatas[index].updatedAt = moment().format("ddd h:mm a");
           }
         });
         reactLocalStorage.setObject("userDataDetails", taskDatas);
@@ -158,6 +165,7 @@ function FromComponents(props) {
           modalType: "",
           showModal: false,
           isEdit: "",
+          schoolId: "",
         }));
       }
     } else {
@@ -182,9 +190,12 @@ function FromComponents(props) {
             id: uuid(),
             title: state.personalData,
             status: "pending",
-            createdAt: moment().format("dddd, h:mm a"),
+            createdAt: moment().format("ddd, h:mm a"),
             updatedAt: "",
             moduleName: props.module,
+            createdDate: moment().format(),
+            completedCount: 0,
+            totalCount: 0,
           });
           reactLocalStorage.setObject("userDataDetails", personalDatas);
           setState((prev) => ({
@@ -193,6 +204,7 @@ function FromComponents(props) {
             personalData: "",
             personalValidate: false,
             personalTitlExists: false,
+            personalId: "",
           }));
         } else {
           setState((prev) => ({
@@ -206,7 +218,7 @@ function FromComponents(props) {
         personalDatas.forEach((item, index) => {
           if (item.id === state.personalId) {
             personalDatas[index].title = state.personalData;
-            personalDatas[index].updatedAt = moment().format("dddd h:mm a");
+            personalDatas[index].updatedAt = moment().format("ddd h:mm a");
           }
         });
         reactLocalStorage.setObject("userDataDetails", personalDatas);
@@ -218,6 +230,7 @@ function FromComponents(props) {
           modalType: "",
           showModal: false,
           isEdit: "",
+          personalId: "",
         }));
       }
     } else {
@@ -241,9 +254,12 @@ function FromComponents(props) {
             id: uuid(),
             title: state.designData,
             status: "pending",
-            createdAt: moment().format("dddd, h:mm a"),
+            createdAt: moment().format("ddd, h:mm a"),
             updatedAt: "",
             moduleName: props.module,
+            createdDate: moment().format(),
+            completedCount: 0,
+            totalCount: 0,
           });
           reactLocalStorage.setObject("userDataDetails", designDatas);
           setState((prev) => ({
@@ -252,6 +268,7 @@ function FromComponents(props) {
             designData: "",
             designValidate: false,
             designTitlExists: false,
+            designId: "",
           }));
         } else {
           setState((prev) => ({
@@ -265,7 +282,7 @@ function FromComponents(props) {
         designDatas.forEach((item, index) => {
           if (item.id === state.designId) {
             designDatas[index].title = state.designData;
-            designDatas[index].updatedAt = moment().format("dddd h:mm a");
+            designDatas[index].updatedAt = moment().format("ddd h:mm a");
           }
         });
         reactLocalStorage.setObject("userDataDetails", designDatas);
@@ -277,6 +294,7 @@ function FromComponents(props) {
           modalType: "",
           showModal: false,
           isEdit: "",
+          designId: "",
         }));
       }
     } else {
@@ -297,16 +315,50 @@ function FromComponents(props) {
     let completedTasklist = taskList?.filter(
       (item) => item.status === "completed"
     );
-    pendingTasklist.sort(function (a, b) {
-      let timeSplit = a.createdAt.split(",");
-      let time2Split = b.createdAt.split(",");
-      return time2Split[1] > timeSplit[1];
-    });
-    pendingTasklist.reverse();
-    completedTasklist.reverse();
-    setTaskDataDetails(pendingTasklist);
-    setComTaskDataDetails(completedTasklist);
-    setState((prev) => ({ ...prev, isModule: "" }));
+    let datelist = taskList?.filter(
+      (item) => moment(item.createdDate).format("L") === moment().format("L")
+    );
+    let dateComlist = completedTasklist?.filter(
+      (item) => moment(item.createdDate).format("L") === moment().format("L")
+    );
+    const sortedFilteredPendTaskList = [...pendingTasklist]
+      .sort((a, b) => {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      })
+      .reverse();
+    const sortedFilteredComTaskList = [...completedTasklist]
+      .sort((a, b) => {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      })
+      .reverse();
+    const newArray = sortedFilteredPendTaskList.reduce((acc, dt, index) => {
+      const date = new Date(dt.createdDate);
+      const formatedDate = `${date.toLocaleDateString()}`;
+      acc[formatedDate] = acc[formatedDate] || {
+        date: formatedDate,
+        value: [],
+      };
+      acc[formatedDate].value.push({
+        id: dt.id,
+        showCount: index,
+        title: dt.title,
+        status: dt.status,
+        createdAt: dt.createdAt,
+        updatedAt: dt.updatedAt,
+        moduleName: dt.moduleName,
+        completedCount: dateComlist.length,
+        totalCount: datelist.length,
+      });
+      return acc;
+    }, {});
+    const newPendingArray = Object.values(newArray);
+    setTaskDataDetails(newPendingArray);
+    setComTaskDataDetails(sortedFilteredComTaskList);
+    setState((prev) => ({
+      ...prev,
+      isModule: "",
+      totalTaskcount: pendingTasklist.length,
+    }));
   };
 
   const getPersonalDetails = () => {
@@ -320,11 +372,50 @@ function FromComponents(props) {
     let completedPerlist = personalList?.filter(
       (item) => item.status === "completed"
     );
-    pendingPerlist.reverse();
-    completedPerlist.reverse();
-    setComPersonalDetails(completedPerlist);
-    setPersonalDetails(pendingPerlist);
-    setState((prev) => ({ ...prev, isModule: "" }));
+    let datelist = personalList?.filter(
+      (item) => moment(item.createdDate).format("L") === moment().format("L")
+    );
+    let dateComlist = completedPerlist?.filter(
+      (item) => moment(item.createdDate).format("L") === moment().format("L")
+    );
+    const sortedFilteredPendPerList = [...pendingPerlist]
+      .sort((a, b) => {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      })
+      .reverse();
+    const sortedFilteredComPerList = [...completedPerlist]
+      .sort((a, b) => {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      })
+      .reverse();
+    const newArray = sortedFilteredPendPerList.reduce((acc, dt, index) => {
+      const date = new Date(dt.createdDate);
+      const formatedDate = `${date.toLocaleDateString()}`;
+      acc[formatedDate] = acc[formatedDate] || {
+        date: formatedDate,
+        value: [],
+      };
+      acc[formatedDate].value.push({
+        id: dt.id,
+        showCount: index,
+        title: dt.title,
+        status: dt.status,
+        createdAt: dt.createdAt,
+        updatedAt: dt.updatedAt,
+        moduleName: dt.moduleName,
+        completedCount: dateComlist.length,
+        totalCount: datelist.length,
+      });
+      return acc;
+    }, {});
+    const newPendingArray = Object.values(newArray);
+    setComPersonalDetails(sortedFilteredComPerList);
+    setPersonalDetails(newPendingArray);
+    setState((prev) => ({
+      ...prev,
+      isModule: "",
+      totalPersonalcount: pendingPerlist.length,
+    }));
   };
 
   const getDesignDetails = () => {
@@ -338,11 +429,52 @@ function FromComponents(props) {
     let completedDesignlist = designList?.filter(
       (item) => item.status === "completed"
     );
-    pendingDesignlist.reverse();
-    completedDesignlist.reverse();
-    setComDesignDetails(completedDesignlist);
-    setDesignDetails(pendingDesignlist);
-    setState((prev) => ({ ...prev, isModule: "" }));
+    let datelist = designList?.filter(
+      (item) => moment(item.createdDate).format("L") === moment().format("L")
+    );
+    let dateComlist = completedDesignlist?.filter(
+      (item) => moment(item.createdDate).format("L") === moment().format("L")
+    );
+    const sortedFilteredPendDesignList = [...pendingDesignlist]
+      .sort((a, b) => {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      })
+      .reverse();
+    const sortedFilteredComDesignList = [...completedDesignlist]
+      .sort((a, b) => {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      })
+      .reverse();
+
+    const newArray = sortedFilteredPendDesignList.reduce((acc, dt, index) => {
+      const date = new Date(dt.createdDate);
+      const formatedDate = `${date.toLocaleDateString()}`;
+
+      acc[formatedDate] = acc[formatedDate] || {
+        date: formatedDate,
+        value: [],
+      };
+      acc[formatedDate].value.push({
+        id: dt.id,
+        showCount: index,
+        title: dt.title,
+        status: dt.status,
+        createdAt: dt.createdAt,
+        updatedAt: dt.updatedAt,
+        moduleName: dt.moduleName,
+        completedCount: dateComlist.length,
+        totalCount: datelist.length,
+      });
+      return acc;
+    }, {});
+    const newPendingArray = Object.values(newArray);
+    setComDesignDetails(sortedFilteredComDesignList);
+    setDesignDetails(newPendingArray);
+    setState((prev) => ({
+      ...prev,
+      isModule: "",
+      totalDesigncount: pendingDesignlist.length,
+    }));
   };
 
   const toggle = () => {
@@ -654,7 +786,7 @@ function FromComponents(props) {
           </div>
         </div>
       </div>
-      <div className="">
+      <div className="d-flex justify-content-center">
         {!state.isUpdate ? (
           <>
             {state.taskValidate ||
@@ -680,92 +812,99 @@ function FromComponents(props) {
             {taskDataDetails.length > 0 ? (
               <>
                 <Row className="justify-content-center">
-                  <Col md="10" sm="12" lg="8" className="mt-3">
+                  <Col md="10" sm="12" lg="8">
                     <h4 className="headerList">
-                      Task - {taskDataDetails.length}
+                      Task - {state.totalTaskcount}
                     </h4>
                   </Col>
                 </Row>
                 <div className="pending-list">
-                  {taskDataDetails.map((item, idx) => (
-                    <>
-                      <Row className="justify-content-center">
-                        <Col md="10" sm="12" lg="8" className="mt-3">
-                          <Card
-                            className="card-style"
-                            onMouseEnter={() => setIsShown(idx)}
-                            onMouseLeave={() => setIsShown(null)}
-                          >
-                            <Row>
-                              <Col className="text-lg-start">
-                                <div className="d-flex">
-                                  <Input
-                                    size="md"
-                                    type="checkbox"
-                                    className="checkbox-custom"
-                                    checked={state.checked}
-                                    onChange={() => {
-                                      updateDetails(item.id, idx);
-                                    }}
-                                  />
-                                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                  <div className="text-height">
-                                    {" "}
-                                    <span className="fontsize-18">
-                                      {" "}
-                                      {item.title}
-                                    </span>
-                                  </div>
-                                </div>
-                              </Col>
-                            </Row>
-                            <Row>
-                              <Col
-                                md="12"
-                                className="fontsize-13 d-flex justify-content-between"
-                              >
-                                <div className="d-flex time-space">
-                                  <div>{`0/${
-                                    taskDataDetails.length - idx
-                                  }`}</div>{" "}
-                                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                  <div>
-                                    {timeFromat(item.createdAt, item.updatedAt)}
-                                  </div>
-                                  {item.updatedAt ? (
-                                    <div className="mx-2">
-                                      {timeFromat(item.updatedAt, "")}
-                                    </div>
-                                  ) : (
-                                    ""
-                                  )}
-                                </div>
-                                {isShown === idx && (
+                  <Row className="justify-content-center">
+                    <Col md="10" sm="12" lg="8">
+                      {taskDataDetails.map((item, index) =>
+                        item.value.map((taskItem, idx) => (
+                          <>
+                            <Card
+                              className="card-style"
+                              onMouseEnter={() =>
+                                setIsShown(taskItem.showCount)
+                              }
+                              onMouseLeave={() => setIsShown(null)}
+                            >
+                              <Row>
+                                <Col className="text-lg-start">
                                   <div className="d-flex">
-                                    <Button
-                                      className="bg-transparent border-0 button-style"
-                                      onClick={() =>
-                                        updateFrom(item.id, "edit")
-                                      }
-                                    >
-                                      <FiEdit size={20} />
-                                    </Button>
-                                    &nbsp;
-                                    <Button
-                                      className="bg-transparent border-0 button-style"
-                                      onClick={() => deleteDetails(item.id)}
-                                    >
-                                      <FiTrash2 size={20} />
-                                    </Button>
+                                    <Input
+                                      size="md"
+                                      type="checkbox"
+                                      className="checkbox-custom"
+                                      checked={state.checked}
+                                      onChange={() => {
+                                        updateDetails(taskItem.id, idx);
+                                      }}
+                                    />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <div className="text-height">
+                                      {" "}
+                                      <span className="fontsize-18">
+                                        {" "}
+                                        {taskItem.title}
+                                      </span>
+                                    </div>
                                   </div>
-                                )}
-                              </Col>
-                            </Row>
-                          </Card>
-                        </Col>
-                      </Row>
-                    </>
-                  ))}
+                                </Col>
+                              </Row>
+                              <Row>
+                                <Col
+                                  md="12"
+                                  className="fontsize-13 d-flex justify-content-between mt-3"
+                                >
+                                  <div className="d-flex time-space">
+                                    <div>{`${taskItem.completedCount}/${taskItem.totalCount}`}</div>{" "}
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <div className="text-success">
+                                      {timeFromat(
+                                        taskItem.createdAt,
+                                        taskItem.updatedAt
+                                      )}
+                                    </div>
+                                    {taskItem.updatedAt ? (
+                                      <div className="mx-2 text-info">
+                                        {timeFromat(taskItem.updatedAt, "")}
+                                      </div>
+                                    ) : (
+                                      ""
+                                    )}
+                                  </div>
+                                  {isShown === taskItem.showCount && (
+                                    <div className="d-flex">
+                                      <Button
+                                        className="bg-transparent border-0 button-style"
+                                        onClick={() =>
+                                          updateFrom(taskItem.id, "edit")
+                                        }
+                                      >
+                                        <FiEdit size={20} />
+                                      </Button>
+                                      &nbsp;
+                                      <Button
+                                        className="bg-transparent border-0 button-style"
+                                        onClick={() =>
+                                          deleteDetails(taskItem.id)
+                                        }
+                                      >
+                                        <FiTrash2 size={20} />
+                                      </Button>
+                                    </div>
+                                  )}
+                                </Col>
+                              </Row>
+                            </Card>
+                          </>
+                        ))
+                      )}
+                    </Col>
+                  </Row>
                 </div>
               </>
             ) : null}
@@ -779,10 +918,10 @@ function FromComponents(props) {
                   </Col>
                 </Row>
                 <div className="complted-list">
-                  {comtaskDataDetails.map((item, idx) => (
-                    <>
-                      <Row className="justify-content-center">
-                        <Col md="10" sm="12" lg="8" className="mt-3">
+                  <Row className="justify-content-center">
+                    <Col md="10" sm="12" lg="8">
+                      {comtaskDataDetails.map((item, idx) => (
+                        <>
                           <Card className="card-style text-lg-start">
                             <Row>
                               <Label className="d-flex">
@@ -822,10 +961,10 @@ function FromComponents(props) {
                               </Col>
                             </Row>
                           </Card>
-                        </Col>
-                      </Row>
-                    </>
-                  ))}
+                        </>
+                      ))}
+                    </Col>
+                  </Row>
                 </div>
               </>
             ) : null}
@@ -838,90 +977,97 @@ function FromComponents(props) {
                 <Row className="justify-content-center">
                   <Col md="10" sm="12" lg="8" className="mt-3">
                     <h4 className="headerList">
-                      User Details - {personalDetails.length}
+                      User Details - {state.totalPersonalcount}
                     </h4>
                   </Col>
                 </Row>
                 <div className="pending-list">
-                  {personalDetails.map((item, idx) => (
-                    <>
-                      <Row className="justify-content-center">
-                        <Col md="10" sm="12" lg="8" className="mt-3">
-                          <Card
-                            className="card-style"
-                            onMouseEnter={() => setIsShown(idx)}
-                            onMouseLeave={() => setIsShown(null)}
-                          >
-                            <Row>
-                              <Col className="text-lg-start">
-                                <div className="d-flex">
-                                  <Input
-                                    size="md"
-                                    type="checkbox"
-                                    className="checkbox-custom"
-                                    checked={state.checked}
-                                    onChange={() => {
-                                      updateDetails(item.id, idx);
-                                    }}
-                                  />
-                                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                  <div className="text-height">
-                                    {" "}
-                                    <span className="fontsize-18">
-                                      {" "}
-                                      {item.title}
-                                    </span>
-                                  </div>
-                                </div>
-                              </Col>
-                            </Row>
-                            <Row>
-                              <Col
-                                md="12"
-                                className="fontsize-13 d-flex justify-content-between"
-                              >
-                                <div className="d-flex time-space">
-                                  <div>{`0/${
-                                    personalDetails.length - idx
-                                  }`}</div>{" "}
-                                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                  <div>
-                                    {timeFromat(item.createdAt, item.updatedAt)}
-                                  </div>
-                                  {item.updatedAt ? (
-                                    <div className="mx-2">
-                                      {timeFromat(item.updatedAt, "")}
-                                    </div>
-                                  ) : (
-                                    ""
-                                  )}
-                                </div>
-                                {isShown === idx && (
+                  <Row className="justify-content-center">
+                    <Col md="10" sm="12" lg="8">
+                      {personalDetails.map((item, index) =>
+                        item.value.map((taskItem, idx) => (
+                          <>
+                            <Card
+                              className="card-style"
+                              onMouseEnter={() =>
+                                setIsShown(taskItem.showCount)
+                              }
+                              onMouseLeave={() => setIsShown(null)}
+                            >
+                              <Row>
+                                <Col className="text-lg-start">
                                   <div className="d-flex">
-                                    <Button
-                                      className="bg-transparent border-0 button-style"
-                                      onClick={() =>
-                                        updateFrom(item.id, "edit")
-                                      }
-                                    >
-                                      <FiEdit size={20} />
-                                    </Button>
-                                    &nbsp;
-                                    <Button
-                                      className="bg-transparent border-0 button-style"
-                                      onClick={() => deleteDetails(item.id)}
-                                    >
-                                      <FiTrash2 size={20} />
-                                    </Button>
+                                    <Input
+                                      size="md"
+                                      type="checkbox"
+                                      className="checkbox-custom"
+                                      checked={state.checked}
+                                      onChange={() => {
+                                        updateDetails(taskItem.id, idx);
+                                      }}
+                                    />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <div className="text-height">
+                                      {" "}
+                                      <span className="fontsize-18">
+                                        {" "}
+                                        {taskItem.title}
+                                      </span>
+                                    </div>
                                   </div>
-                                )}
-                              </Col>
-                            </Row>
-                          </Card>
-                        </Col>
-                      </Row>
-                    </>
-                  ))}
+                                </Col>
+                              </Row>
+                              <Row>
+                                <Col
+                                  md="12"
+                                  className="fontsize-13 d-flex justify-content-between mt-3"
+                                >
+                                  <div className="d-flex time-space">
+                                    <div>{`${taskItem.completedCount}/${taskItem.totalCount}`}</div>{" "}
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <div className="text-success">
+                                      {timeFromat(
+                                        taskItem.createdAt,
+                                        taskItem.updatedAt
+                                      )}
+                                    </div>
+                                    {taskItem.updatedAt ? (
+                                      <div className="mx-2 text-info">
+                                        {timeFromat(taskItem.updatedAt, "")}
+                                      </div>
+                                    ) : (
+                                      ""
+                                    )}
+                                  </div>
+                                  {isShown === taskItem.showCount && (
+                                    <div className="d-flex">
+                                      <Button
+                                        className="bg-transparent border-0 button-style"
+                                        onClick={() =>
+                                          updateFrom(taskItem.id, "edit")
+                                        }
+                                      >
+                                        <FiEdit size={20} />
+                                      </Button>
+                                      &nbsp;
+                                      <Button
+                                        className="bg-transparent border-0 button-style"
+                                        onClick={() =>
+                                          deleteDetails(taskItem.id)
+                                        }
+                                      >
+                                        <FiTrash2 size={20} />
+                                      </Button>
+                                    </div>
+                                  )}
+                                </Col>
+                              </Row>
+                            </Card>
+                          </>
+                        ))
+                      )}
+                    </Col>
+                  </Row>
                 </div>
               </>
             ) : null}
@@ -935,10 +1081,10 @@ function FromComponents(props) {
                   </Col>
                 </Row>
                 <div className="complted-list">
-                  {comPersonalDetails.map((item, idx) => (
-                    <>
-                      <Row className="justify-content-center">
-                        <Col md="10" sm="12" lg="8" className="mt-3">
+                  <Row className="justify-content-center">
+                    <Col md="10" sm="12" lg="8" className="mt-3">
+                      {comPersonalDetails.map((item, idx) => (
+                        <>
                           <Card className="card-style text-lg-start">
                             <Row>
                               <Label className="d-flex">
@@ -978,10 +1124,10 @@ function FromComponents(props) {
                               </Col>
                             </Row>
                           </Card>
-                        </Col>
-                      </Row>
-                    </>
-                  ))}
+                        </>
+                      ))}
+                    </Col>
+                  </Row>
                 </div>
               </>
             ) : null}
@@ -994,88 +1140,97 @@ function FromComponents(props) {
                 <Row className="justify-content-center">
                   <Col md="10" sm="12" lg="8" className="mt-3">
                     <h4 className="headerList">
-                      New Design - {designDetails.length}
+                      New Design - {state.totalDesigncount}
                     </h4>
                   </Col>
                 </Row>
                 <div className="pending-list">
-                  {designDetails.map((item, idx) => (
-                    <>
-                      <Row className="justify-content-center">
-                        <Col md="10" sm="12" lg="8" className="mt-3">
-                          <Card
-                            className="card-style"
-                            onMouseEnter={() => setIsShown(idx)}
-                            onMouseLeave={() => setIsShown(null)}
-                          >
-                            <Row>
-                              <Col className="text-lg-start">
-                                <div className="d-flex">
-                                  <Input
-                                    size="md"
-                                    type="checkbox"
-                                    className="checkbox-custom"
-                                    checked={state.checked}
-                                    onChange={() => {
-                                      updateDetails(item.id, idx);
-                                    }}
-                                  />
-                                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                  <div className="text-height">
-                                    {" "}
-                                    <span className="fontsize-18">
-                                      {" "}
-                                      {item.title}
-                                    </span>
-                                  </div>
-                                </div>
-                              </Col>
-                            </Row>
-                            <Row>
-                              <Col
-                                md="12"
-                                className="fontsize-13 d-flex justify-content-between"
-                              >
-                                <div className="d-flex time-space">
-                                  <div>{`0/${designDetails.length - idx}`}</div>{" "}
-                                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                  <div>
-                                    {timeFromat(item.createdAt, item.updatedAt)}
-                                  </div>
-                                  {item.updatedAt ? (
-                                    <div className="mx-2">
-                                      {timeFromat(item.updatedAt, "")}
-                                    </div>
-                                  ) : (
-                                    ""
-                                  )}
-                                </div>
-                                {isShown === idx && (
+                  <Row className="justify-content-center">
+                    <Col md="10" sm="12" lg="8" className="mt-3">
+                      {designDetails.map((item, index) =>
+                        item.value.map((taskItem, idx) => (
+                          <>
+                            <Card
+                              className="card-style"
+                              onMouseEnter={() =>
+                                setIsShown(taskItem.showCount)
+                              }
+                              onMouseLeave={() => setIsShown(null)}
+                            >
+                              <Row>
+                                <Col className="text-lg-start">
                                   <div className="d-flex">
-                                    <Button
-                                      className="bg-transparent border-0 button-style"
-                                      onClick={() =>
-                                        updateFrom(item.id, "edit")
-                                      }
-                                    >
-                                      <FiEdit size={20} />
-                                    </Button>
-                                    &nbsp;
-                                    <Button
-                                      className="bg-transparent border-0 button-style"
-                                      onClick={() => deleteDetails(item.id)}
-                                    >
-                                      <FiTrash2 size={20} />
-                                    </Button>
+                                    <Input
+                                      size="md"
+                                      type="checkbox"
+                                      className="checkbox-custom"
+                                      checked={state.checked}
+                                      onChange={() => {
+                                        updateDetails(taskItem.id, idx);
+                                      }}
+                                    />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <div className="text-height">
+                                      {" "}
+                                      <span className="fontsize-18">
+                                        {" "}
+                                        {taskItem.title}
+                                      </span>
+                                    </div>
                                   </div>
-                                )}
-                              </Col>
-                            </Row>
-                          </Card>
-                        </Col>
-                      </Row>
-                    </>
-                  ))}
+                                </Col>
+                              </Row>
+                              <Row>
+                                <Col
+                                  md="12"
+                                  className="fontsize-13 d-flex justify-content-between mt-3"
+                                >
+                                  <div className="d-flex time-space">
+                                    <div>{`${taskItem.completedCount}/${taskItem.totalCount}`}</div>{" "}
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <div className="text-success">
+                                      {timeFromat(
+                                        taskItem.createdAt,
+                                        taskItem.updatedAt
+                                      )}
+                                    </div>
+                                    {taskItem.updatedAt ? (
+                                      <div className="mx-2 text-info">
+                                        {timeFromat(taskItem.updatedAt, "")}
+                                      </div>
+                                    ) : (
+                                      ""
+                                    )}
+                                  </div>
+                                  {isShown === taskItem.showCount && (
+                                    <div className="d-flex">
+                                      <Button
+                                        className="bg-transparent border-0 button-style"
+                                        onClick={() =>
+                                          updateFrom(taskItem.id, "edit")
+                                        }
+                                      >
+                                        <FiEdit size={20} />
+                                      </Button>
+                                      &nbsp;
+                                      <Button
+                                        className="bg-transparent border-0 button-style"
+                                        onClick={() =>
+                                          deleteDetails(taskItem.id)
+                                        }
+                                      >
+                                        <FiTrash2 size={20} />
+                                      </Button>
+                                    </div>
+                                  )}
+                                </Col>
+                              </Row>
+                            </Card>
+                          </>
+                        ))
+                      )}
+                    </Col>
+                  </Row>
                 </div>
               </>
             ) : null}
@@ -1089,10 +1244,10 @@ function FromComponents(props) {
                   </Col>
                 </Row>
                 <div className="complted-list">
-                  {comDesignDetails.map((item, idx) => (
-                    <>
-                      <Row className="justify-content-center">
-                        <Col md="10" sm="12" lg="8" className="mt-3">
+                  <Row className="justify-content-center">
+                    <Col md="10" sm="12" lg="8" className="mt-3">
+                      {comDesignDetails.map((item, idx) => (
+                        <>
                           <Card className="card-style text-lg-start">
                             <Row>
                               <Label className="d-flex">
@@ -1132,10 +1287,10 @@ function FromComponents(props) {
                               </Col>
                             </Row>
                           </Card>
-                        </Col>
-                      </Row>
-                    </>
-                  ))}
+                        </>
+                      ))}
+                    </Col>
+                  </Row>
                 </div>
               </>
             ) : null}
