@@ -12,21 +12,21 @@ const testMenuItems = [
     href: "/",
     title: "School",
     icon: <BiSolidSchool size={30} />,
-    background: "linear-gradient(to right, #f4c4f3, #fc67fa)",
+    background: "#f953c6",
   },
   {
     id: "2",
     href: "Pages/Personal",
     title: "Personal",
     icon: <BiSolidUserCircle size={30} />,
-    background: "linear-gradient(to right, #11998e, #38ef7d)",
+    background: "rgb(0 189 128)",
   },
   {
     id: "3",
     href: "Pages/Design",
     title: "Design",
     icon: <SiCodesignal size={30} />,
-    background: "linear-gradient(to right, #da22ff, #9733ee)",
+    background: "#9733ee",
   },
 ];
 
@@ -89,7 +89,7 @@ export default function Layout() {
                     className="text-decoration-none mt-3"
                   >
                     <div className="d-flex">
-                      <span
+                      <div
                         style={{
                           background: item.background,
                         }}
@@ -97,7 +97,7 @@ export default function Layout() {
                         title={collapsed ? "" : item.title}
                       >
                         {item.icon}
-                      </span>
+                      </div>
                       {collapsed ? (
                         <span className="text-light p-3 mx-4 fontsize-15">
                           {item.title}

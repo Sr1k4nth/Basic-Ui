@@ -721,7 +721,7 @@ function FromComponents(props) {
     <div className="maincontainar">
       <Row>
         <Col></Col>
-        <Col md="9" className="d-flex justify-content-between">
+        <Col md="8" className="d-flex justify-content-between">
           <div className="d-flex">
             <Button className="bg-transparent border-0 button-style">
               <BiLeftArrowCircle className="text-light" size={40} />
@@ -820,7 +820,7 @@ function FromComponents(props) {
                 </Row>
                 <div className="pending-list">
                   <Row className="justify-content-center">
-                    <Col md="12" sm="12" lg="9">
+                    <Col md="12" sm="12" lg="8">
                       {taskDataDetails.map((item, index) =>
                         item.value.map((taskItem, idx) => (
                           <>
@@ -919,7 +919,7 @@ function FromComponents(props) {
                 </Row>
                 <div className="complted-list">
                   <Row className="justify-content-center">
-                    <Col md="12" sm="12" lg="9">
+                    <Col md="12" sm="12" lg="8">
                       {comtaskDataDetails.map((item, idx) => (
                         <>
                           <Card className="card-style text-lg-start">
@@ -976,7 +976,7 @@ function FromComponents(props) {
                 </Row>
                 <div className="pending-list">
                   <Row className="justify-content-center">
-                    <Col md="12" sm="12" lg="9">
+                    <Col md="12" sm="12" lg="8">
                       {personalDetails.map((item, index) =>
                         item.value.map((taskItem, idx) => (
                           <>
@@ -1075,7 +1075,7 @@ function FromComponents(props) {
                 </Row>
                 <div className="complted-list">
                   <Row className="justify-content-center">
-                    <Col md="12" sm="12" lg="9" className="mt-3">
+                    <Col md="12" sm="12" lg="8" className="mt-3">
                       {comPersonalDetails.map((item, idx) => (
                         <>
                           <Card className="card-style text-lg-start">
@@ -1132,7 +1132,7 @@ function FromComponents(props) {
                 </Row>
                 <div className="pending-list">
                   <Row className="justify-content-center">
-                    <Col md="12" sm="12" lg="9" className="mt-3">
+                    <Col md="12" sm="12" lg="8" className="mt-3">
                       {designDetails.map((item, index) =>
                         item.value.map((taskItem, idx) => (
                           <>
@@ -1231,7 +1231,7 @@ function FromComponents(props) {
                 </Row>
                 <div className="complted-list">
                   <Row className="justify-content-center">
-                    <Col md="12" sm="12" lg="9" className="mt-3">
+                    <Col md="12" sm="12" lg="8" className="mt-3">
                       {comDesignDetails.map((item, idx) => (
                         <>
                           <Card className="card-style text-lg-start">

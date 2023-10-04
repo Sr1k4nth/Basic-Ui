@@ -1,5 +1,5 @@
 .App {
-  background: #15171c;
+  background: #15171c !important;
   height: 100vh;
   overflow: hidden;
 }
@@ -9,10 +9,10 @@
 }
 
 .side-bar-title {
-  height: 100px;
+  height: 80px;
   display: flex;
   align-items: center;
-  padding: 0px 0px 0px 16px;
+  padding: 16px 0px 0px 16px;
 }
 
 .outlet-style {
@@ -24,7 +24,7 @@
   height: 100vh;
   top: 0;
   left: 0;
-  transition: 350ms;
+  transition: 300ms;
 }
 
 .sidebarmenu1 {
@@ -32,11 +32,11 @@
   height: 100vh;
   top: 0;
   left: 0;
-  transition: 350ms;
+  transition: 300ms;
 }
 
 .side-nav-item {
-  padding: 30px;
+  padding: 10px 10px 15px 30px;
   width: 100%;
 }
 
@@ -47,25 +47,26 @@
 
 .side-nav-active {
   background: rgb(49, 54, 59);
-  padding: 30px;
+  padding: 10px 10px 15px 30px;
   width: 100%;
 }
 
 .side-nav-active1 {
   background: rgb(49, 54, 59);
-  padding: 30px;
+  padding: 10px 10px 15px 30px;
   width: 100%;
 }
 
 .side-nav-item1 {
-  padding: 30px;
+  padding: 10px 10px 15px 30px;
   width: 100%;
 }
 
 .sidebar-icon {
-  font-size: 25px;
   padding: 10px;
   border-radius: 10px;
+  height: 50px;
+  margin-top: 5px;
 }
 
 .side-nav-item1:hover {
@@ -75,7 +76,7 @@
 
 .active-header {
   background: rgb(49, 54, 59);
-  padding: 10px;
+  padding: 7px 15px;
   border-radius: 10px;
 }
 
@@ -180,14 +181,6 @@
   color: #bc4e9c !important;
 }
 
-.pending-list {
-  padding: 30px;
-}
-
-.complted-list {
-  padding: 30px;
-}
-
 .maincontainar {
   margin-top: 30px;
 }
@@ -218,6 +211,16 @@
   overflow: scroll;
   overflow-x: hidden;
   margin-bottom: 5%;
+  animation: fadeIn 2s;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .plus-icon {
@@ -321,3 +324,6 @@
     display: none !important;
   }
 }
+
+
+/* font: 1em/1.5 'brandon_bold',san-serif; */
