@@ -820,7 +820,7 @@ function FromComponents(props) {
                 </Row>
                 <div className="pending-list">
                   <Row className="justify-content-center">
-                    <Col md="10" sm="12" lg="8">
+                    <Col md="12" sm="12" lg="9">
                       {taskDataDetails.map((item, index) =>
                         item.value.map((taskItem, idx) => (
                           <>
@@ -846,7 +846,7 @@ function FromComponents(props) {
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <div className="text-height">
                                       {" "}
-                                      <p className="font-style text-decoration-line-through">
+                                      <p className="font-style">
                                         {" "}
                                         {taskItem.title}
                                       </p>
@@ -857,7 +857,7 @@ function FromComponents(props) {
                               <Row>
                                 <Col
                                   md="12"
-                                  className="fontsize-13 d-flex justify-content-between mt-3"
+                                  className="fontsize-13 d-flex justify-content-between"
                                 >
                                   <div className="d-flex time-space">
                                     <div>{`${taskItem.completedCount}/${taskItem.totalCount}`}</div>{" "}
@@ -919,7 +919,7 @@ function FromComponents(props) {
                 </Row>
                 <div className="complted-list">
                   <Row className="justify-content-center">
-                    <Col md="10" sm="12" lg="8">
+                    <Col md="12" sm="12" lg="9">
                       {comtaskDataDetails.map((item, idx) => (
                         <>
                           <Card className="card-style text-lg-start">
@@ -976,7 +976,7 @@ function FromComponents(props) {
                 </Row>
                 <div className="pending-list">
                   <Row className="justify-content-center">
-                    <Col md="10" sm="12" lg="8">
+                    <Col md="12" sm="12" lg="9">
                       {personalDetails.map((item, index) =>
                         item.value.map((taskItem, idx) => (
                           <>
@@ -1002,7 +1002,7 @@ function FromComponents(props) {
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <div className="text-height">
                                       {" "}
-                                      <p className="font-style text-decoration-line-through">
+                                      <p className="font-style">
                                         {" "}
                                         {taskItem.title}
                                       </p>
@@ -1013,7 +1013,7 @@ function FromComponents(props) {
                               <Row>
                                 <Col
                                   md="12"
-                                  className="fontsize-13 d-flex justify-content-between mt-3"
+                                  className="fontsize-13 d-flex justify-content-between"
                                 >
                                   <div className="d-flex time-space">
                                     <div>{`${taskItem.completedCount}/${taskItem.totalCount}`}</div>{" "}
@@ -1075,7 +1075,7 @@ function FromComponents(props) {
                 </Row>
                 <div className="complted-list">
                   <Row className="justify-content-center">
-                    <Col md="10" sm="12" lg="8" className="mt-3">
+                    <Col md="12" sm="12" lg="9" className="mt-3">
                       {comPersonalDetails.map((item, idx) => (
                         <>
                           <Card className="card-style text-lg-start">
@@ -1132,7 +1132,7 @@ function FromComponents(props) {
                 </Row>
                 <div className="pending-list">
                   <Row className="justify-content-center">
-                    <Col md="10" sm="12" lg="8" className="mt-3">
+                    <Col md="12" sm="12" lg="9" className="mt-3">
                       {designDetails.map((item, index) =>
                         item.value.map((taskItem, idx) => (
                           <>
@@ -1158,7 +1158,7 @@ function FromComponents(props) {
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <div className="text-height">
                                       {" "}
-                                      <p className="font-style text-decoration-line-through">
+                                      <p className="font-style">
                                         {" "}
                                         {taskItem.title}
                                       </p>
@@ -1169,7 +1169,7 @@ function FromComponents(props) {
                               <Row>
                                 <Col
                                   md="12"
-                                  className="fontsize-13 d-flex justify-content-between mt-3"
+                                  className="fontsize-13 d-flex justify-content-between"
                                 >
                                   <div className="d-flex time-space">
                                     <div>{`${taskItem.completedCount}/${taskItem.totalCount}`}</div>{" "}
@@ -1231,7 +1231,7 @@ function FromComponents(props) {
                 </Row>
                 <div className="complted-list">
                   <Row className="justify-content-center">
-                    <Col md="10" sm="12" lg="8" className="mt-3">
+                    <Col md="12" sm="12" lg="9" className="mt-3">
                       {comDesignDetails.map((item, idx) => (
                         <>
                           <Card className="card-style text-lg-start">

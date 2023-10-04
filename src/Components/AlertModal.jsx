@@ -196,7 +196,7 @@ function AlertModal(props) {
                   type="textarea"
                   className="edit_input_field"
                   autoFocus={true}
-                  rows={5}
+                  rows={8}
                   value={
                     props.module === "School"
                       ? state.taskData
